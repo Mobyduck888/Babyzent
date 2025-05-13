@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>my sweetheart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffb6c1, #ffe4e1);
+      overflow: hidden;
+      font-family: 'Prompt', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      position: relative;
+    }
+
+    #clickText {
+      font-size: 20px;
+      color: #c62828;
+      margin-bottom: 36px;
+      animation: fadeBlink 2.5s ease-in-out infinite;
+    }
+
+    @keyframes fadeBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    #heartBtn {
+      width: 60px;
+      height: 60px;
+      background: red;
+      transform: rotate(-45deg);
+      cursor: pointer;
+      position: relative;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    #heartBtn::before,
+    #heartBtn::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    #heartBtn::before {
+      top: -30px;
+      left: 0;
+    }
+
+    #heartBtn::after {
+      left: 30px;
+      top: 0;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1) rotate(-45deg); }
+      50% { transform: scale(1.1) rotate(-45deg); }
+      100% { transform: scale(1) rotate(-45deg); }
+    }
+
+    .message-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+    }
+
+    .message-line {
+      font-size: 26px;
+      color: #b71c1c;
+      white-space: pre-wrap;
+      text-align: center;
+      margin-bottom: 14px;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: smoothFadeUp 2.5s ease forwards;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes smoothFadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(-45deg);
+      animation: floatHeart 4s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 10px;
+      top: 0;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(0) rotate(-45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-200px) rotate(-45deg);
+        opacity: 0;
+      }
+    }
+
+    .bg-music {
+      position: absolute;
+      width: 0;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="clickText">Click the heart</div>
+  <div id="heartBtn"></div>
+  <div class="message-container" id="messageContainer"></div>
+
+  <div class="bg-music">
+    <iframe width="0" height="0" src="https://www.youtube.com/embed/xakBzg5atsM?autoplay=1&loop=1&playlist=xakBzg5atsM" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    const messages = [
+      "To babyZent" ,
+      "ขอบคุณนะคะ ที่มาเป็นแฟนกัน เค้ารักที่รักมาก ๆ เลยนะ",
+      "ถึงจะไม่เข้าใจกันบ้างหรือว่าทะเลาะกันบ้าง",
+      "แต่จบด้วยการคุยกันทุกรอบเลย",
+      "ขอบคุณนะคะที่รักกันมากขนาดนี้",
+      "เค้าชอบจังเวลาที่อ้วนมี react แบบนั้นแบบนี้ในแต่ละอย่าง",
+      "ชอบที่เล่าว่าแต่ละวันไปเจออะไรบ้าง",
+      "ชอบที่อ้วนใส่ใจ ชอบที่อ้วนบอกรัก ชอบทุกอย่างเลย",
+      "คุณจะรู้มั้ยว่า ในแต่ละอย่างที่เค้าทำให้ คุณทำให้ทุกอย่างนั้นมีค่าหมดเลย",
+      "มันถึงเป็นอีกหนึ่งสาเหตุที่เค้ารักอ้วนมาก แล้วก็จะรักมาก ๆ ต่อไป ในทุก ๆ วันเลยค่ะ",
+      "เค้ารักอ้วนที่สุดแระ จุ๊บ ๆ นะเคิ้ป 🫶🏻🫶🏻🫶🏻"
+    ];
+
+    const heartBtn = document.getElementById('heartBtn');
+    const clickText = document.getElementById('clickText');
+    const container = document.getElementById('messageContainer');
+
+    function showHearts() {
+      for (let i = 0; i < 10; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = '100vh';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+      }
+    }
+
+    function typeWriter(text, element, i = 0, callback) {
+      if (i < text.length) {
+        element.textContent += text.charAt(i);
+        setTimeout(() => typeWriter(text, element, i + 1, callback), 60);
+      } else {
+        setTimeout(callback, 800);
+      }
+    }
+
+    function showAllMessages(index = 0) {
+      if (index < messages.length) {
+        const line = document.createElement('div');
+        line.className = 'message-line';
+        container.appendChild(line);
+        setTimeout(() => {
+          typeWriter(messages[index], line, 0, () => {
+            showHearts();
+            showAllMessages(index + 1);
+          });
+        }, 100);
+      }
+    }
+
+    heartBtn.addEventListener('click', () => {
+      heartBtn.style.display = 'none';
+      clickText.style.display = 'none';
+      showAllMessages();
+    });
+  </script>
+</body>
+</html>
